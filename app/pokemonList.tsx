@@ -1,11 +1,14 @@
 import React, { useEffect, useState, memo } from 'react';
-import { StyleSheet, Alert, Image, TouchableOpacity, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Alert, Image, TouchableOpacity, Dimensions, FlatList, useColorScheme } from 'react-native';
 import { Text, View } from '../components/Themed';
 import Loading from 'components/Loading';
 import axios from 'axios';
 import { getPokemonByRegion } from 'utils/getPokemonByRegion';
 import { capitalizeFirstLetter } from 'utils/commonUtils';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
+import { BlurView } from 'expo-blur';
+import { useHeaderHeight }from '@react-navigation/elements';
+
 var { width } = Dimensions.get('window');
 
 function PokemonListScreen() {
@@ -17,6 +20,8 @@ function PokemonListScreen() {
   const [loading, setLoading] = useState(true);
   const pokemonWidth = width >= 600 ? 300 : width * 0.3;
   const wrapperWidth = width >= 600 ? 200 : width * 0.3;
+  const colorScheme = useColorScheme();
+  const headerHeight = useHeaderHeight();
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -68,6 +73,10 @@ function PokemonListScreen() {
         options={{
           // @ts-ignore
           headerTitle: capitalizeFirstLetter(params.name),
+          headerTransparent: true,
+          headerBackground: () => (
+            <BlurView tint={colorScheme} intensity={100} style={StyleSheet.absoluteFill} />
+          ),
         }}
       />
       <View style={styles.container}>
@@ -79,7 +88,7 @@ function PokemonListScreen() {
             keyExtractor={(_, index) => index.toString()}
             onEndReached={handleNextPokemon}
             onEndReachedThreshold={0.3}
-            contentContainerStyle={styles.innerContainer}
+            contentContainerStyle={{...styles.innerContainer, marginTop: headerHeight}}
             maxToRenderPerBatch={10}
             removeClippedSubviews={true}
             renderItem={({ item }) => {
