@@ -5,8 +5,10 @@ import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react
 import axios from 'axios';
 import PokemonRegions from 'constants/PokemonRegions';
 import { useRouter } from 'expo-router';
+import { useHeaderHeight }from '@react-navigation/elements';
 
 const Home = () => {
+  const headerHeight = useHeaderHeight();
   const [regions, setRegions] = useState([]);
   const { width } = Dimensions.get('window');
   const router = useRouter();
@@ -48,7 +50,7 @@ const Home = () => {
         keyExtractor={(item) => item.name}
         numColumns={numColumns}
         renderItem={renderGenerationItem}
-        contentContainerStyle={styles.innerContainer}
+        contentContainerStyle={{...styles.innerContainer, paddingTop: headerHeight, paddingBottom: headerHeight }}
         showsVerticalScrollIndicator={false}
       />
     </View>
