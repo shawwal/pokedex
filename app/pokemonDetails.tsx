@@ -29,8 +29,6 @@ export default function PokemonDetailsScreen() {
       method: 'GET',
     }).then((response) => {
       if (response.status === 200) {
-        // console.log('data', response.data.moves);
-        // console.log('response.data', response.data)
         setDetail(response.data);
         setDominantType(response.data.types[0].type.name);
       }
@@ -228,7 +226,7 @@ export default function PokemonDetailsScreen() {
                       let checkType = pokemonMovesType.filter(function (entry: any) {
                         return entry.name === obj.move.name;
                       });
-                      
+
                       let moveType = checkType != undefined ? checkType[0]?.type : dominantType;
 
                       return (

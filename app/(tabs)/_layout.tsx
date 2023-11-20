@@ -1,8 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
-
+import { Pressable, useColorScheme, StyleSheet } from 'react-native';
+import { BlurView } from 'expo-blur';
 import Colors from '../../constants/Colors';
+import CustomTabBar from '../../components/CustomTabBar';
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -21,12 +22,19 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-      }}>
+        tabBarStyle: {
+          backgroundColor: 'transparent',
+          elevation: 0,
+        },
+      }}
+      tabBar={(props) => <CustomTabBar {...props} />}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          headerTransparent: true,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -41,6 +49,9 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+          headerBackground: () => (
+            <BlurView tint={colorScheme} intensity={100} style={StyleSheet.absoluteFill} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -48,13 +59,21 @@ export default function TabLayout() {
         options={{
           title: 'Favorite',
           tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
+          headerTransparent: true,
+          headerBackground: () => (
+            <BlurView tint={colorScheme} intensity={100} style={StyleSheet.absoluteFill} />
+          ),
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',
           tabBarIcon: ({ color }) => <TabBarIcon name="cogs" color={color} />,
+          headerTransparent: true,
+          headerBackground: () => (
+            <BlurView tint={colorScheme} intensity={100} style={StyleSheet.absoluteFill} />
+          ),
         }}
       />
     </Tabs>
