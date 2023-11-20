@@ -118,153 +118,155 @@ export default function PokemonDetailsScreen() {
           source={{ uri: officialArtWork }}
         />
         <View style={styles.detailsBg}>
-          <TouchableOpacity onPress={() => pokeSpeak(details.name)}><Text style={styles.pokemonName} ellipsizeMode='tail' numberOfLines={1}>{details.name}</Text></TouchableOpacity>
-          <View style={styles.typeRow}>
-            {details.types?.map((obj: any, index: string | number | undefined) => {
-              const pokeType = PokemonTypes[obj.type.name];
-              return (
-                <View key={index} style={{ ...styles.typeBorder, backgroundColor: TypeColors[obj.type.name], borderColor: TypeColors[obj.type.name] }}>
-                  {/* @ts-ignore */}
-                  <Image source={pokeType} />
-                  <Text style={styles.typeText}>{obj.type.name}</Text>
-                </View>
-              )
-            })}
-          </View>
-          {newDesc == undefined ? <ActivityIndicator /> : <TouchableOpacity onPress={() => pokeSpeak(String(newDesc))}><Text style={styles.descText}>{String(newDesc)}</Text></TouchableOpacity>}
-          {details.height ?
-            <View style={styles.bmi}>
-              <Text>Height: {details.height / 10} m</Text>
-              <Text>Weight: {details.weight / 10} kg</Text>
+          <View style={styles.detailsWrapper}>
+            <TouchableOpacity onPress={() => pokeSpeak(details.name)}><Text style={styles.pokemonName} ellipsizeMode='tail' numberOfLines={1}>{details.name}</Text></TouchableOpacity>
+            <View style={styles.typeRow}>
+              {details.types?.map((obj: any, index: string | number | undefined) => {
+                const pokeType = PokemonTypes[obj.type.name];
+                return (
+                  <View key={index} style={{ ...styles.typeBorder, backgroundColor: TypeColors[obj.type.name], borderColor: TypeColors[obj.type.name] }}>
+                    {/* @ts-ignore */}
+                    <Image source={pokeType} />
+                    <Text style={styles.typeText}>{obj.type.name}</Text>
+                  </View>
+                )
+              })}
             </View>
-            : null}
-          <Text style={{ textAlign: 'center', fontWeight: '500' }}>Abilities</Text>
-          <View style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            paddingTop: 7,
-          }}>
-            {details.abilities?.map((obj: any, index: number) => {
-              return (
-                <View key={index} style={{
-                  borderWidth: 1,
-                  borderColor: TypeColors[dominantType],
-                  padding: 5,
-                  borderRadius: 5,
-                  margin: 3
-                }}>
-                  <Text style={{ textTransform: "capitalize", color: TypeColors[dominantType] }}>{obj.ability.name}</Text>
-                </View>
-              )
-            })}
-          </View>
-          {details.stats ?
-            <View style={styles.tabContainer}>
-              <View style={styles.tabRow}>
-                {TabArray.map((obj: any, index: number) => {
-                  const checkActiveTabs = activeTabs == index ? TypeColors[dominantType] : undefined;
-                  const checkActiveText = activeTabs == index ? 'white' : TypeColors[dominantType];
-                  return (
-                    <TouchableOpacity
-                      key={index}
-                      style={{ ...styles.tabs, backgroundColor: checkActiveTabs }}
-                      onPress={() => setActiveTabs(index)}
-                    >
-                      <Text style={{ ...styles.tabText, color: checkActiveText }}>{obj}</Text>
-                    </TouchableOpacity>
-                  )
-                })}
+            {newDesc == undefined ? <ActivityIndicator /> : <TouchableOpacity onPress={() => pokeSpeak(String(newDesc))}><Text style={styles.descText}>{String(newDesc)}</Text></TouchableOpacity>}
+            {details.height ?
+              <View style={styles.bmi}>
+                <Text>Height: {details.height / 10} m</Text>
+                <Text>Weight: {details.weight / 10} kg</Text>
               </View>
-              {activeTabs == 0 ?
-                <View>
-                  {details.stats?.map((obj: any, index: number) => {
-                    const maxRange = obj.base_stat > 200 ? obj.base_stat : 200;
-                    const range = obj.base_stat / maxRange * 100;
-                    let width = animation.current.interpolate({
-                      inputRange: [0, maxRange],
-                      outputRange: [`${range}%`, "100%"],
-                      extrapolate: "clamp"
-                    })
-                    return (
-                      <View style={styles.statsRow} key={index}>
-                        <Text style={{ ...styles.statText, color: TypeColors[dominantType] }}>{StatsArray[index]}</Text>
-                        <Text style={styles.statNumber}>{obj.base_stat}</Text>
-                        <View style={{ ...styles.progressBar, borderColor: TypeColors[dominantType], }}>
-                          <Animated.View style={{ backgroundColor: TypeColors[dominantType], width }} />
-                        </View>
-                      </View>
-                    )
-                  })}
-                </View>
-                : null}
-              {activeTabs == 1 ?
-                <View style={styles.evolutionChain}>
-                  {evolution.map((obj: any, index: number) => {
-                    const urlString = String(obj.species_url);
-                    const pokemonId = urlString.slice(-7).replace(/\D|\//g, "");
-                    const pokmeonImage = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + pokemonId + '.png';
+              : null}
+            <Text style={{ textAlign: 'center', fontWeight: '500' }}>Abilities</Text>
+            <View style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              paddingTop: 7,
+            }}>
+              {details.abilities?.map((obj: any, index: number) => {
+                return (
+                  <View key={index} style={{
+                    borderWidth: 1,
+                    borderColor: TypeColors[dominantType],
+                    padding: 5,
+                    borderRadius: 5,
+                    margin: 3
+                  }}>
+                    <Text style={{ textTransform: "capitalize", color: TypeColors[dominantType] }}>{obj.ability.name}</Text>
+                  </View>
+                )
+              })}
+            </View>
+            {details.stats ?
+              <View style={styles.tabContainer}>
+                <View style={styles.tabRow}>
+                  {TabArray.map((obj: any, index: number) => {
+                    const checkActiveTabs = activeTabs == index ? TypeColors[dominantType] : undefined;
+                    const checkActiveText = activeTabs == index ? 'white' : TypeColors[dominantType];
                     return (
                       <TouchableOpacity
-                        style={styles.evolutionRow}
                         key={index}
-                        onPress={() => pushToEvolution(pokemonId)}
+                        style={{ ...styles.tabs, backgroundColor: checkActiveTabs }}
+                        onPress={() => setActiveTabs(index)}
                       >
-                        <Image
-                          style={styles.evolutionThumb}
-                          source={{ uri: pokmeonImage }} />
-                        <Text style={{ textTransform: 'capitalize' }}>{obj.species_name}</Text>
+                        <Text style={{ ...styles.tabText, color: checkActiveText }}>{obj}</Text>
                       </TouchableOpacity>
                     )
                   })}
-
                 </View>
-                : null}
-              {activeTabs == 2 ?
-                <View>
-                  {details.moves.map((obj: any, index: number) => {
-
-                    let checkType = pokemonMovesType.filter(function (entry: any) {
-                      return entry.name === obj.move.name;
-                    });
-
-                    let moveType = checkType != undefined ? checkType[0].type : dominantType;
-
-                    return (
-                      <View key={index} style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginVertical: 7,
-                        paddingBottom: 7,
-                        alignItems: 'center',
-                        borderBottomColor: '#aeaeae',
-                        borderBottomWidth: 0.5
-                      }}>
-                        <View>
-                          <Text style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>{obj.move.name}</Text>
-                          <Text>Level {obj.version_group_details[0].level_learned_at}</Text>
+                {activeTabs == 0 ?
+                  <View>
+                    {details.stats?.map((obj: any, index: number) => {
+                      const maxRange = obj.base_stat > 200 ? obj.base_stat : 200;
+                      const range = obj.base_stat / maxRange * 100;
+                      let width = animation.current.interpolate({
+                        inputRange: [0, maxRange],
+                        outputRange: [`${range}%`, "100%"],
+                        extrapolate: "clamp"
+                      })
+                      return (
+                        <View style={styles.statsRow} key={index}>
+                          <Text style={{ ...styles.statText, color: TypeColors[dominantType] }}>{StatsArray[index]}</Text>
+                          <Text style={styles.statNumber}>{obj.base_stat}</Text>
+                          <View style={{ ...styles.progressBar, borderColor: TypeColors[dominantType], }}>
+                            <Animated.View style={{ backgroundColor: TypeColors[dominantType], width }} />
+                          </View>
                         </View>
-
-                        <View
-                          style={{
-                            borderColor: TypeColors[moveType],
-                            padding: 5,
-                            borderRadius: 20,
-                            borderWidth: 1,
-                            backgroundColor: TypeColors[moveType],
-                          }}
+                      )
+                    })}
+                  </View>
+                  : null}
+                {activeTabs == 1 ?
+                  <View style={styles.evolutionChain}>
+                    {evolution.map((obj: any, index: number) => {
+                      const urlString = String(obj.species_url);
+                      const pokemonId = urlString.slice(-7).replace(/\D|\//g, "");
+                      const pokmeonImage = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + pokemonId + '.png';
+                      return (
+                        <TouchableOpacity
+                          style={styles.evolutionRow}
+                          key={index}
+                          onPress={() => pushToEvolution(pokemonId)}
                         >
-                          {/* @ts-ignore */}
-                          <Image style={{ width: 17, height: 17, resizeMode: 'contain' }} source={PokemonTypes[moveType]} />
+                          <Image
+                            style={styles.evolutionThumb}
+                            source={{ uri: pokmeonImage }} />
+                          <Text style={{ textTransform: 'capitalize' }}>{obj.species_name}</Text>
+                        </TouchableOpacity>
+                      )
+                    })}
+
+                  </View>
+                  : null}
+                {activeTabs == 2 ?
+                  <View>
+                    {details.moves.map((obj: any, index: number) => {
+
+                      let checkType = pokemonMovesType.filter(function (entry: any) {
+                        return entry.name === obj.move.name;
+                      });
+                      
+                      let moveType = checkType != undefined ? checkType[0]?.type : dominantType;
+
+                      return (
+                        <View key={index} style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          marginVertical: 7,
+                          paddingBottom: 7,
+                          alignItems: 'center',
+                          borderBottomColor: '#aeaeae',
+                          borderBottomWidth: 0.5
+                        }}>
+                          <View>
+                            <Text style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>{obj.move.name}</Text>
+                            <Text>Level {obj.version_group_details[0].level_learned_at}</Text>
+                          </View>
+
+                          <View
+                            style={{
+                              borderColor: TypeColors[moveType],
+                              padding: 5,
+                              borderRadius: 20,
+                              borderWidth: 1,
+                              backgroundColor: TypeColors[moveType],
+                            }}
+                          >
+                            {/* @ts-ignore */}
+                            <Image style={{ width: 17, height: 17, resizeMode: 'contain' }} source={PokemonTypes[moveType]} />
+                          </View>
                         </View>
-                      </View>
-                    )
-                  })}
-                </View>
-                : null}
-            </View>
-            : null}
+                      )
+                    })}
+                  </View>
+                  : null}
+              </View>
+              : null}
+          </View>
         </View>
       </ScrollView>
     </View >
@@ -298,6 +300,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 55,
     borderTopLeftRadius: 55,
     zIndex: 2,
+    alignItems: 'center',
+  },
+  detailsWrapper: {
+    maxWidth: 600,
   },
   title: {
     fontSize: 20,
@@ -359,9 +365,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'center',
     marginBottom: 5,
+    width: '100%',
   },
   tabs: {
     display: 'flex',
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,

@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     width: '100%',
-    maxWidth: 900, // Maximum width for desktop
   },
   titleCase: {
     textTransform: 'capitalize'
