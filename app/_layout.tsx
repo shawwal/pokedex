@@ -50,6 +50,7 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="pokemonList"/>
+        <Stack.Screen name="pokemonDetails" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ headerTitle: 'Information', presentation: 'modal' }} />
       </Stack>
     </ThemeProvider>
