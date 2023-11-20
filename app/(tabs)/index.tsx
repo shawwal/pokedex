@@ -3,11 +3,13 @@ import { View } from '../../components/Themed';
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
 import axios from 'axios';
-import PokemonRegions from 'components/PokemonRegions';
+import PokemonRegions from 'constants/PokemonRegions';
+import { useRouter } from 'expo-router';
 
-const Home = ({ navigation }) => {
+const Home = () => {
   const [regions, setRegions] = useState([]);
   const { width } = Dimensions.get('window');
+  const router = useRouter();
   useEffect(() => {
     const fetchRegions = async () => {
       try {
@@ -21,22 +23,22 @@ const Home = ({ navigation }) => {
     fetchRegions();
   }, []);
 
-  const handleNavigate = (item: any) => (
-    console.log('item', item)
-    // navigation.navigate('PokemonList', { region: item })
-  )
+  const handleNavigate = (item: any, index: number) => {
+    router.push({ pathname: "/pokemonList", params: { name: item.name, url: item.url, number: index + 1 } });
+  }
 
   const numColumns = width >= 600 ? 3 : 2; // 3 columns on tablet and desktop, 2 columns on mobile
   const posterWidth = width >= 600 ? 200 : 180;
 
-  const renderGenerationItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.generationItem}
-      onPress={() => handleNavigate(item)}
-    >
-      {/* @ts-ignore */}
-      <Image source={PokemonRegions[item.name]} style={{...styles.generationImage, maxWidth: posterWidth}} />
-    </TouchableOpacity>
+  const renderGenerationItem = ({ item, index }) => (
+    item.name === 'hisui' ? <View /> :
+      <TouchableOpacity
+        style={styles.generationItem}
+        onPress={() => handleNavigate(item, index)}
+      >
+        {/* @ts-ignore */}
+        <Image source={PokemonRegions[item.name]} style={{ ...styles.generationImage, maxWidth: posterWidth }} />
+      </TouchableOpacity>
   );
 
   return (
