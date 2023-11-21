@@ -109,7 +109,7 @@ export default function PokemonDetailsScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={{ ...styles.imageBg, backgroundColor: TypeColors[dominantType] }} />
         <Image
           defaultSource={require('./../assets/images/pokeball.png')}
