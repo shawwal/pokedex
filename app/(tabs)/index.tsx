@@ -5,7 +5,8 @@ import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react
 import axios from 'axios';
 import PokemonRegions from 'constants/PokemonRegions';
 import { useRouter } from 'expo-router';
-import { useHeaderHeight }from '@react-navigation/elements';
+import { useHeaderHeight } from '@react-navigation/elements';
+import Head from "expo-router/head";
 
 const Home = () => {
   const headerHeight = useHeaderHeight();
@@ -44,16 +45,38 @@ const Home = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={regions}
-        keyExtractor={(item) => item.name}
-        numColumns={numColumns}
-        renderItem={renderGenerationItem}
-        contentContainerStyle={{...styles.innerContainer, paddingTop: headerHeight, paddingBottom: headerHeight }}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <>
+      <Head>
+        <meta name="description" content="Discover, capture, and learn about every Pokémon with our React Native-powered Pokédex app! Seamlessly explore on web, iOS, and Android. Your journey to become a Pokémon Master starts here – download now!" />
+        <meta name="keywords" content="Pokédex Pro, Pokédex app, React Native, Pokémon Master, Cross-platform, Capture Pokémon, Explore Pokémon world, iOS, Android, web" />
+        <meta name="author" content="Shawwal Muhammad" />
+        <link rel="canonical" href="https://pokedex.shawwals.com" />
+
+        <meta property="og:title" content="Pokédex App: Explore, Capture, and Learn with React Native" />
+        <meta property="og:description" content="Discover the Pokémon universe with our advanced Pokédex app. Seamlessly explore, capture, and learn on web, iOS, and Android. Download now for the ultimate Pokémon Master experience!" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pokedex.shawwals.com" />
+        <meta property="og:image" content="https://pokedex.shawwals.com/assets/assets/images/icon.png" />
+        <meta property="og:image:alt" content="Pokédex App Interface" />
+        <meta property="og:site_name" content="Pokédex Pro" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Pokédex App: Explore, Capture, and Learn with React Native" />
+        <meta name="twitter:description" content="Discover the Pokémon universe with our advanced Pokédex app. Seamlessly explore, capture, and learn on web, iOS, and Android. Download now for the ultimate Pokémon Master experience!" />
+        <meta name="twitter:image" content="https://pokedex.shawwals.com/assets/assets/images/icon.png" />
+        <title>Pokédex Pro: Explore, Capture, and Learn with React Native</title>
+      </Head>
+      <View style={styles.container}>
+        <FlatList
+          data={regions}
+          keyExtractor={(item) => item.name}
+          numColumns={numColumns}
+          renderItem={renderGenerationItem}
+          contentContainerStyle={{ ...styles.innerContainer, paddingTop: headerHeight, paddingBottom: headerHeight }}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+    </>
   );
 };
 

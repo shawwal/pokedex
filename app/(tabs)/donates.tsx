@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Alert, Image, Linking, Clipboard } from 'react-native';
+import { StyleSheet, TouchableOpacity, Alert, Image, Linking, Clipboard, Platform } from 'react-native';
 import { Text, View } from '../../components/Themed';
 
 export default function TabDonatesScreen() {
@@ -10,21 +10,36 @@ export default function TabDonatesScreen() {
 
   const showMetaMaskAddress = () => {
     const walletAddress = '0x2785b6206ADe4B688ADFD6ECB206f56997eAd85D';
-
-    Alert.alert(
-      'MetaMask Wallet Address',
-      `Your MetaMask wallet address: ${walletAddress}`,
-      [
-        {
-          text: 'Copy Address',
-          onPress: async () => {
-            await Clipboard.setString(walletAddress);
-            Alert.alert('Address Copied', 'Your MetaMask wallet address has been copied to the clipboard.');
-          },
+  
+    const handleCopyAddress = async () => {
+      await Clipboard.setString(walletAddress);
+      Alert.alert('Address Copied', 'Your MetaMask wallet address has been copied to the clipboard.');
+    };
+  
+    if (Platform.OS === 'web') {
+      // For web platform, use navigator.clipboard.writeText
+      navigator.clipboard.writeText(walletAddress).then(
+        function () {
+          window.alert('Address Copied, Your MetaMask wallet address has been copied to the clipboard.');
         },
-        { text: 'OK', onPress: () => { } },
-      ]
-    );
+        function (err) {
+          window.alert('Unable to copy to clipboard' +  err);
+        }
+      );
+    } else {
+      // For mobile platforms, use Alert.alert and Clipboard.setString
+      Alert.alert(
+        'MetaMask Wallet Address',
+        `Your MetaMask wallet address: ${walletAddress}`,
+        [
+          {
+            text: 'Copy Address',
+            onPress: handleCopyAddress,
+          },
+          { text: 'OK', onPress: () => {} },
+        ]
+      );
+    }
   };
 
   return (
