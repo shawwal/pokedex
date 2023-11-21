@@ -66,10 +66,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="donates"
         options={{
-          title: 'Settings',
-          tabBarIcon: ({ color }) => <TabBarIcon name="cogs" color={color} />,
+          title: 'Donates',
+          tabBarIcon: ({ color }) => <TabBarIcon name="dollar" color={color} />,
           headerTransparent: true,
           headerBackground: () => (
             <BlurView tint={colorScheme} intensity={100} style={StyleSheet.absoluteFill} />
