@@ -1,6 +1,5 @@
 import React, { useEffect, useState, memo } from 'react';
 import { StyleSheet, Alert, useColorScheme } from 'react-native';
-import { View } from '../components/Themed';
 import Loading from 'components/Loading';
 import axios from 'axios';
 import { getPokemonByRegion } from 'utils/getPokemonByRegion';
@@ -8,7 +7,6 @@ import { capitalizeFirstLetter } from 'utils/commonUtils';
 import { useLocalSearchParams, Stack } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import PokemonListing from '../components/PokemonListing';
-
 
 function PokemonListScreen() {
   const [pokemonList, setPokemonList] = useState([]);
@@ -64,24 +62,14 @@ function PokemonListScreen() {
           ),
         }}
       />
-      <View style={styles.container}>
-        {pokemonList.length === 0 || loading ? <Loading /> :
+      {pokemonList.length === 0 || loading ? <Loading /> :
         <PokemonListing
           handleNextPokemon={handleNextPokemon}
           data={pokemonList}
         />
-        }
-      </View>
+      }
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-});
 
 export default memo(PokemonListScreen)
