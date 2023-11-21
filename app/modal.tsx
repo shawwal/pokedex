@@ -32,8 +32,8 @@ export default function ModalScreen() {
           </TouchableOpacity>
         </View>
         <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-        <Text style={styles.title}>Developer Notes</Text>
-        <Text style={styles.modalText}>This is an unofficial, non-commercial, fan-made app and is NOT affiliated, endorsed or supported by Nintendo, Game Freak and The Pokémon Company in any way. Many images used in this app are copyrighted and are supported under fair use. Pokémon and Pokémon character names are trademarks of Nintendo. No copyright infringement intended.</Text>
+        <Text style={styles.title}>Developer Notes:</Text>
+        <Text style={styles.modalText}>This app is unofficial and NOT affiliated, endorsed or supported by Nintendo, GAME FREAK or The Pokémon company in any way. Some images used in this app are copyrighted and are supported under fair use. Pokémon and Pokémon character names are trademarks of Nintendo. No copyright infringement intended. Pokémon ©2002-2018 Pokémon. ©1995-2018 Nintendo/Creatures Inc./GAME FREAK inc.</Text>
         {/* Use a light status bar on iOS to account for the black space above the modal */}
         <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
       </View>
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   separator: {
     marginVertical: 30,

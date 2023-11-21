@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Image, Alert, ActivityIndicator, ScrollView, TouchableOpacity, Animated, Platform } from 'react-native';
+import { StyleSheet, Image, Alert, ActivityIndicator, ScrollView, TouchableOpacity, Animated } from 'react-native';
 import { Text, View } from '../components/Themed';
+import FavoriteToggle from '../components/FavoriteToggle';
 import axios from 'axios';
 import TypeColors from '../constants/TypeColors';
 import PokemonTypes from '../constants/PokemonTypes';
@@ -115,6 +116,9 @@ export default function PokemonDetailsScreen() {
           style={styles.pokemonImg}
           source={{ uri: officialArtWork }}
         />
+        <View style={styles.toggleStar} >
+          <FavoriteToggle pokemonName={details.name} pokemonUrl={endPoint}/>
+        </View>
         <View style={styles.detailsBg}>
           <View style={styles.detailsWrapper}>
             <TouchableOpacity onPress={() => pokeSpeak(details.name)}><Text style={styles.pokemonName} ellipsizeMode='tail' numberOfLines={1}>{details.name}</Text></TouchableOpacity>
@@ -137,22 +141,11 @@ export default function PokemonDetailsScreen() {
                 <Text>Weight: {details.weight / 10} kg</Text>
               </View>
               : null}
-            <Text style={{ textAlign: 'center', fontWeight: '500' }}>Abilities</Text>
-            <View style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              paddingTop: 7,
-            }}>
+            {details.abilities ? <Text style={{ textAlign: 'center', fontWeight: '500' }}>Abilities</Text> : null}
+            <View style={styles.abilitiesRow}>
               {details.abilities?.map((obj: any, index: number) => {
                 return (
-                  <View key={index} style={{
-                    borderWidth: 1,
-                    borderColor: TypeColors[dominantType],
-                    padding: 5,
-                    borderRadius: 5,
-                    margin: 3
-                  }}>
+                  <View key={index} style={{ ...styles.abilitiesColumn, borderColor: TypeColors[dominantType] }}>
                     <Text style={{ textTransform: "capitalize", color: TypeColors[dominantType] }}>{obj.ability.name}</Text>
                   </View>
                 )
@@ -230,16 +223,7 @@ export default function PokemonDetailsScreen() {
                       let moveType = checkType != undefined ? checkType[0]?.type : dominantType;
 
                       return (
-                        <View key={index} style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          marginVertical: 7,
-                          paddingBottom: 7,
-                          alignItems: 'center',
-                          borderBottomColor: '#aeaeae',
-                          borderBottomWidth: 0.5
-                        }}>
+                        <View key={index} style={styles.movesRow}>
                           <View>
                             <Text style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>{obj.move.name}</Text>
                             <Text>Level {obj.version_group_details[0].level_learned_at}</Text>
@@ -275,6 +259,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  toggleStar: {
+    position: 'absolute',
+    right: 20,
+    top: 30,
+    zIndex: 3,
+    backgroundColor: 'transparent'
+  },
   scroll: {
     alignItems: 'center',
   },
@@ -292,7 +283,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   detailsBg: {
-    paddingTop: 70,
+    paddingTop: 90,
     width: '100%',
     flex: 1,
     borderTopRightRadius: 55,
@@ -302,15 +293,23 @@ const styles = StyleSheet.create({
   },
   detailsWrapper: {
     maxWidth: 600,
+    minWidth: 375,
+  },
+  abilitiesRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: 7,
+  },
+  abilitiesColumn: {
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 5,
+    margin: 3,
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
   pokemonName: {
     textTransform: 'capitalize',
@@ -346,7 +345,7 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     zIndex: 3,
-    top: 30,
+    top: 50,
     position: 'absolute',
     resizeMode: 'contain',
   },
@@ -425,5 +424,15 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'contain'
+  },
+  movesRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 7,
+    paddingBottom: 7,
+    alignItems: 'center',
+    borderBottomColor: '#aeaeae',
+    borderBottomWidth: 0.5
   }
 });

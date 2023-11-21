@@ -1,27 +1,20 @@
 import React, { useEffect, useState, memo } from 'react';
-import { StyleSheet, Alert, Image, TouchableOpacity, Dimensions, FlatList, useColorScheme } from 'react-native';
-import { Text, View } from '../components/Themed';
+import { StyleSheet, Alert, useColorScheme } from 'react-native';
 import Loading from 'components/Loading';
 import axios from 'axios';
 import { getPokemonByRegion } from 'utils/getPokemonByRegion';
 import { capitalizeFirstLetter } from 'utils/commonUtils';
-import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
+import { useLocalSearchParams, Stack } from 'expo-router';
 import { BlurView } from 'expo-blur';
-import { useHeaderHeight }from '@react-navigation/elements';
-
-var { width } = Dimensions.get('window');
+import PokemonListing from '../components/PokemonListing';
 
 function PokemonListScreen() {
   const [pokemonList, setPokemonList] = useState([]);
   const [nextApi, setNextApi] = useState('');
   const params = useLocalSearchParams();
-  const router = useRouter();
   const { name } = params;
   const [loading, setLoading] = useState(true);
-  const pokemonWidth = width >= 600 ? 300 : width * 0.3;
-  const wrapperWidth = width >= 600 ? 200 : width * 0.3;
   const colorScheme = useColorScheme();
-  const headerHeight = useHeaderHeight();
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -35,18 +28,8 @@ function PokemonListScreen() {
         setLoading(false);
       }
     };
-
     fetchPokemon();
   }, []);
-
-  function handlePokemonDetails(link: any, id: any) {
-    router.push({
-      pathname: "/pokemonDetails", params: {
-        endPoint: link,
-        imgId: id
-      }
-    });
-  }
 
   function handleNextPokemon() {
     axios({
@@ -79,65 +62,14 @@ function PokemonListScreen() {
           ),
         }}
       />
-      <View style={styles.container}>
-        {pokemonList.length === 0 || loading ? <Loading /> :
-          <FlatList
-            data={pokemonList}
-            numColumns={3}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(_, index) => index.toString()}
-            onEndReached={handleNextPokemon}
-            onEndReachedThreshold={0.3}
-            contentContainerStyle={{...styles.innerContainer, marginTop: headerHeight}}
-            maxToRenderPerBatch={10}
-            removeClippedSubviews={true}
-            renderItem={({ item }) => {
-              const urlString = String(item.url);
-              const pokemonId = urlString.slice(-7).replace(/\D|\//g, "");
-              const pokemonImage = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemonId + '.png';
-              return (
-                <TouchableOpacity
-                  onPress={() => handlePokemonDetails(item.url, pokemonId)}
-                  style={{ ...styles.pokemonWrapper, width: wrapperWidth }}
-                  key={item.name}
-                >
-                  <Image
-                    style={{ ...styles.pokemonImg, width: pokemonWidth }}
-                    source={{ uri: pokemonImage }}
-                  />
-                  <Text style={styles.titleCase} ellipsizeMode='tail' numberOfLines={1}>{item.name}</Text>
-                </TouchableOpacity>
-              )
-            }}
-          />
-        }
-      </View>
+      {pokemonList.length === 0 || loading ? <Loading /> :
+        <PokemonListing
+          handleNextPokemon={handleNextPokemon}
+          data={pokemonList}
+        />
+      }
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  innerContainer: {
-    width: '100%',
-  },
-  titleCase: {
-    textTransform: 'capitalize'
-  },
-  pokemonWrapper: {
-    margin: 3,
-    borderRadius: 8,
-    overflow: 'hidden',
-    alignItems: 'center',
-  },
-  pokemonImg: {
-    height: 110,
-    resizeMode: 'contain',
-  },
-});
 
 export default memo(PokemonListScreen)
