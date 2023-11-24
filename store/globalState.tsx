@@ -33,3 +33,9 @@ export const favoritePokemonState = atom({
   default: [],
   effects_UNSTABLE: [localStorageEffect('favoritePokemonState')],
 });
+
+export const autoReadPokemonName = atom({
+  key: 'autoReadPokemonName',
+  default: false,
+  effects_UNSTABLE: [localStorageEffect('autoReadPokemonName')],
+});

@@ -66,13 +66,27 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="donates"
+        name="settings"
         options={{
-          title: 'Donates',
-          tabBarIcon: ({ color }) => <TabBarIcon name="dollar" color={color} />,
+          title: 'Settings',
+          tabBarIcon: ({ color }) => <TabBarIcon name="cogs" color={color} />,
           headerTransparent: true,
           headerBackground: () => (
             <BlurView tint={colorScheme} intensity={100} style={StyleSheet.absoluteFill} />
+          ),
+          headerRight: () => (
+            <Link href="/donatesModal" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="dollar"
+                    size={25}
+                    color={Colors[colorScheme ?? 'light'].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
           ),
         }}
       />

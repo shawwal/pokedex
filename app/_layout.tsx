@@ -57,6 +57,7 @@ function RootLayoutNav() {
           <Stack.Screen name="pokemonList" />
           <Stack.Screen name="pokemonDetails" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ headerTitle: 'Information', presentation: 'modal' }} />
+          <Stack.Screen name="donatesModal" options={{ headerTitle: 'Donates', presentation: 'modal' }} />
         </Stack>
       </ThemeProvider>
     </RecoilRoot>

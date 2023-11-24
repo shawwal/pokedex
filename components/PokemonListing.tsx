@@ -11,11 +11,12 @@ const PokemonListing = ({ handleNextPokemon, data }: { handleNextPokemon?: any, 
   const headerHeight = useHeaderHeight();
   const router = useRouter();
 
-  function handlePokemonDetails(link: any, id: any) {
+  function handlePokemonDetails(link: any, id: any, name: any) {
     router.push({
       pathname: "/pokemonDetails", params: {
         endPoint: link,
-        imgId: id
+        imgId: id,
+        name: name
       }
     });
   }
@@ -37,7 +38,7 @@ const PokemonListing = ({ handleNextPokemon, data }: { handleNextPokemon?: any, 
           const pokemonImage = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemonId + '.png';
           return (
             <TouchableOpacity
-              onPress={() => handlePokemonDetails(item.url, pokemonId)}
+              onPress={() => handlePokemonDetails(item.url, pokemonId, item.name)}
               style={{ ...styles.pokemonWrapper, width: wrapperWidth }}
               key={item.name}
             >

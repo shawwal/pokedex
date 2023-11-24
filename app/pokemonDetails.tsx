@@ -8,11 +8,13 @@ import PokemonTypes from '../constants/PokemonTypes';
 import * as Speech from 'expo-speech';
 import { useLocalSearchParams } from 'expo-router';
 import pokemonMovesType from "../constants/PokemonMovesType";
+import { useRecoilValue } from 'recoil';
+import { autoReadPokemonName } from 'store/globalState';
 
 
 export default function PokemonDetailsScreen() {
   const params = useLocalSearchParams();
-  const { endPoint, imgId } = params;
+  const { endPoint, imgId, name } = params;
   const [imageId, setImageId] = useState(imgId);
   const [pokeEndPoint, setEndpoint] = useState(endPoint as any);
   const [details, setDetail] = useState([]) as any;
@@ -21,8 +23,9 @@ export default function PokemonDetailsScreen() {
   const [evolutionEndPoint, setEvolutionEndPoint] = useState([]) as any;
   const [dominantType, setDominantType] = useState('');
   const [activeTabs, setActiveTabs] = useState(0) as any;
-
   const officialArtWork = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + imageId + ".png";
+
+  const autoRead = useRecoilValue(autoReadPokemonName);
 
   const getPokemon = async () => {
     axios({
@@ -102,10 +105,21 @@ export default function PokemonDetailsScreen() {
 
   let animation = useRef(new Animated.Value(0));
 
-  const pokeSpeak = (sentance: string) => {
-    Speech.speak(sentance);
+  const pokeSpeak = (sentence: any) => {
+    Speech.speak(sentence);
   };
 
+  useEffect(() => {
+    let readExample = true;
+    if (readExample === true && autoRead === true) {
+      setTimeout(() => {
+        pokeSpeak(name)
+      }, 1500);
+    }
+    return function cleanup() {
+      readExample = false
+    }
+  }, []);
 
   return (
     <View style={styles.container}>

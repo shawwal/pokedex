@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Alert, Image, Linking, Clipboard, Platform } from 'react-native';
-import { Text, View } from '../../components/Themed';
+import { Text, View } from '../components/Themed';
 
 export default function TabDonatesScreen() {
 
@@ -58,10 +58,10 @@ export default function TabDonatesScreen() {
 
         <View style={styles.donationRow}>
           <TouchableOpacity style={styles.payPalButton} onPress={showPayPalDonation}>
-            <Image source={require('../../assets/images/paypal.png')} style={styles.logo} />
+            <Image source={require('../assets/images/paypal.png')} style={styles.logo} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.metaMaskButton} onPress={showMetaMaskAddress}>
-            <Image source={require('../../assets/images/metamask.png')} style={styles.logo} />
+            <Image source={require('../assets/images/metamask.png')} style={styles.logo} />
           </TouchableOpacity>
         </View>
         <Text>Thank you for making the Pokédex App awesome!</Text>
