@@ -1,5 +1,5 @@
 
-import { View } from '../../components/Themed';
+import { View, Text } from '../../components/Themed';
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
 import axios from 'axios';
@@ -8,8 +8,13 @@ import PokemonRegions from 'components/PokemonRegions';
 const Home = ({ navigation }) => {
   const [regions, setRegions] = useState([]);
   const { width } = Dimensions.get('window');
+
+  const numColumns = width >= 600 ? 3 : 2;
+  const posterWidth = width >= 600 ? 200 : 180;
+
   useEffect(() => {
     const fetchRegions = async () => {
+
       try {
         const response = await axios.get('https://pokeapi.co/api/v2/region');
         setRegions(response.data.results);
@@ -26,16 +31,13 @@ const Home = ({ navigation }) => {
     // navigation.navigate('PokemonList', { region: item })
   )
 
-  const numColumns = width >= 600 ? 3 : 2; // 3 columns on tablet and desktop, 2 columns on mobile
-  const posterWidth = width >= 600 ? 200 : 180;
-
-  const renderGenerationItem = ({ item }) => (
+  const renderRegionItem = ({ item }) => (
     <TouchableOpacity
       style={styles.generationItem}
       onPress={() => handleNavigate(item)}
     >
       {/* @ts-ignore */}
-      <Image source={PokemonRegions[item.name]} style={{...styles.generationImage, maxWidth: posterWidth}} />
+      <Image source={PokemonRegions[item.name]} style={{...styles.gnerationImage, maxWidth: posterWidth}} />
     </TouchableOpacity>
   );
 
@@ -45,7 +47,7 @@ const Home = ({ navigation }) => {
         data={regions}
         keyExtractor={(item) => item.name}
         numColumns={numColumns}
-        renderItem={renderGenerationItem}
+        renderItem={renderRegionItem}
         contentContainerStyle={styles.innerContainer}
         showsVerticalScrollIndicator={false}
       />
@@ -65,18 +67,11 @@ const styles = StyleSheet.create({
   },
   generationItem: {
     margin: 3,
+  },
+  gnerationImage: {
+    height: 300,
     borderRadius: 8,
-    overflow: 'hidden',
-    alignItems: 'center',
-  },
-  generationImage: {
-    height: 300, // Set a fixed height for the images
-    borderRadius: 8,
-  },
-  generationText: {
-    fontSize: 16,
-    marginTop: 8,
-  },
+  }
 });
 
 export default Home;
